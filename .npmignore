@@ -1,0 +1,8 @@
+/src
+/node_modules
+
+.env
+.DS_Store //only for mac os
+
+tsconfig.json
+tsup.config.ts

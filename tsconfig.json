@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "noImplicitAny": true,
+        "esModuleInterop": true,
+        "strictNullChecks": true,
+        "target": "ES2022",
+        "moduleResolution": "bundler",
+        "module": "ESNext",
+        "skipLibCheck": true,
+        "declaration": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "outDir": "dist",
+        "forceConsistentCasingInFileNames": true,
+
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
+}

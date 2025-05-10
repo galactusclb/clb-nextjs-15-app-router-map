@@ -1,0 +1,33 @@
+{
+  "name": "app-router-map",
+  "version": "0.0.1",
+  "description": "It helps to generate a dynamic router map in App Router-based NextJS applications.",
+  "author": "galactusclb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/galactusclb/clb-nextjs-15-app-router-map/issues"
+  },
+  "homepage": "https://github.com/galactusclb/clb-nextjs-15-app-router-map#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/galactusclb/clb-nextjs-15-app-router-map.git"
+  },
+  "keywords": [
+    "app-router"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "build-link" : "npm run build && npm link"
+  },
+  "devDependencies": {
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3"
+  }
+}
