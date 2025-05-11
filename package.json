@@ -24,9 +24,12 @@
   },
   "scripts": {
     "build": "tsup",
-    "build-link" : "npm run build && npm link"
+    "build-link": "npm run build && npm link",
+    "start": "ts-node src/index.ts"
   },
   "devDependencies": {
+    "@types/node": "^22.15.17",
+    "ts-node": "^10.9.2",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3"
   }
