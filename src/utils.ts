@@ -4,11 +4,11 @@ import path from 'node:path';
 export type DirectoryProp = Record<string, any>
 
 export type ConfigProp = {
-    skipNoPage: boolean
+    skipNoPageFile: boolean
 }
 
 const config: ConfigProp = {
-    skipNoPage: true
+    skipNoPageFile: false
 }
 
 const initialRoute: DirectoryProp = {
@@ -25,20 +25,22 @@ export async function getDirectories(dir: string, baseDir?: string): Promise<Dir
     const entries = await fs.readdir(dir, { withFileTypes: true });
 
     for (const entry of entries) {
-        if (!entry.isDirectory()) continue;
-        if (isPrivateDirectory(entry.name)) continue;
-
         const fullPath = path.join(dir, entry.name);
 
-        if (config?.skipNoPage && !(await hasPageJsInDirectory(fullPath))) continue;
+        if (!entry.isDirectory()) continue;
+        if (isPrivateDirectory(entry.name)) continue;
+        if (config?.skipNoPageFile && !(await hasPageJsInDirectory(fullPath))) continue;
 
-        const relativePath = '/' + path.relative(resolvedBaseDir, fullPath).replace(/\\/g, '/');
+        const relativePath = resolveRelativePath(resolvedBaseDir, fullPath);
 
         if (!baseDir) {
             result['/'][entry.name] = {
                 path: relativePath,
                 ...(await getDirectories(fullPath, resolvedBaseDir))
             }
+        } else if (isRouteGroupDirectory(entry.name)) {
+            const children = await getDirectories(fullPath, resolvedBaseDir);
+            Object.assign(result, children);
         } else {
             result[entry.name] = {
                 path: relativePath,
@@ -50,6 +52,14 @@ export async function getDirectories(dir: string, baseDir?: string): Promise<Dir
     return result;
 };
 
+function resolveRelativePath(baseDir: string, targetDir: string): string {
+    return '/' + path.relative(baseDir, targetDir).replace(/\\/g, '/');
+}
+
+function isRouteGroupDirectory(directoryName: string): boolean {
+    return directoryName?.slice(0, 1) === "(";
+}
+
 function isPrivateDirectory(directoryName: string): boolean {
     return directoryName?.slice(0, 1) === "_";
 }
@@ -59,7 +69,7 @@ async function hasPageJsInDirectory(dir: string): Promise<boolean> {
 
     for (const file of pageFiles) {
         const filePath = path.join(dir, file);
-        try { 
+        try {
             await fs.access(filePath);
             return true;
         } catch {
