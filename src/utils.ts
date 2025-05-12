@@ -34,10 +34,17 @@ export async function getDirectories(dir: string, baseDir?: string): Promise<Dir
 
         const relativePath = '/' + path.relative(resolvedBaseDir, fullPath).replace(/\\/g, '/');
 
-        result[entry.name] = {
-            path: relativePath,
-            ...(await getDirectories(fullPath, resolvedBaseDir))
-        };
+        if (!baseDir) {
+            result['/'][entry.name] = {
+                path: relativePath,
+                ...(await getDirectories(fullPath, resolvedBaseDir))
+            }
+        } else {
+            result[entry.name] = {
+                path: relativePath,
+                ...(await getDirectories(fullPath, resolvedBaseDir))
+            };
+        }
     }
 
     return result;
