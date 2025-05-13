@@ -37,8 +37,17 @@ export async function getDirectories(dir: string, baseDir?: string): Promise<Dir
                 ...(await getDirectories(fullPath, resolvedBaseDir))
             }
         } else if (isRouteGroupDirectory(entry.name)) {
+
             const children = await getDirectories(fullPath, resolvedBaseDir);
             Object.assign(result, children);
+            
+        } else if (isDynamicDirectory(entry.name)) {
+
+            result[entry.name?.slice(1, -1)] = {
+                path: relativePath,
+                ...(await getDirectories(fullPath, resolvedBaseDir))
+            };
+            
         } else {
             result[entry.name] = {
                 path: relativePath,
@@ -60,6 +69,10 @@ function isRouteGroupDirectory(directoryName: string): boolean {
 
 function isPrivateDirectory(directoryName: string): boolean {
     return directoryName?.slice(0, 1) === "_";
+}
+
+function isDynamicDirectory(directoryName: string): boolean {
+    return directoryName?.slice(0, 1) === "[" && directoryName?.slice(0, 4) !== "[..." && directoryName?.slice(0, 5) !== "[[...";
 }
 
 async function hasPageFileInDirectory(dir: string): Promise<boolean> {
