@@ -1,24 +1,22 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-export type DirectoryProp = Record<string, any>
+import { ConfigProp } from './types';
 
-export type ConfigProp = {
-    skipNoPageFile: boolean
-}
+export type DirectoryProp = Record<string, any>
 
 const config: ConfigProp = {
     skipNoPageFile: false
 }
 
-const initialRoute: DirectoryProp = {
+const rootRoute: DirectoryProp = {
     "/": {
         path: "/"
     }
 }
 
 export async function getDirectories(dir: string, baseDir?: string): Promise<DirectoryProp> {
-    const result: DirectoryProp = !baseDir ? initialRoute : {};
+    const result: DirectoryProp = !baseDir ? rootRoute : {};
 
     const resolvedBaseDir = baseDir ? path.resolve(baseDir) : path.resolve(dir);
 
@@ -29,7 +27,7 @@ export async function getDirectories(dir: string, baseDir?: string): Promise<Dir
 
         if (!entry.isDirectory()) continue;
         if (isPrivateDirectory(entry.name)) continue;
-        if (config?.skipNoPageFile && !(await hasPageJsInDirectory(fullPath))) continue;
+        if (config?.skipNoPageFile && !(await hasPageFileInDirectory(fullPath))) continue;
 
         const relativePath = resolveRelativePath(resolvedBaseDir, fullPath);
 
@@ -64,7 +62,7 @@ function isPrivateDirectory(directoryName: string): boolean {
     return directoryName?.slice(0, 1) === "_";
 }
 
-async function hasPageJsInDirectory(dir: string): Promise<boolean> {
+async function hasPageFileInDirectory(dir: string): Promise<boolean> {
     const pageFiles = ['page.js', 'page.ts', 'page.tsx', 'page.jsx'];
 
     for (const file of pageFiles) {

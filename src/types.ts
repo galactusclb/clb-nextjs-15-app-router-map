@@ -8,3 +8,7 @@ export type RouteNode = {
 export type RouteMap = {
     [route: string]: RouteNode;
 };
+
+export type ConfigProp = {
+    skipNoPageFile: boolean
+}
