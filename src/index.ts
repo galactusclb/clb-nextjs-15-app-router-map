@@ -1,5 +1,9 @@
-export * from "./functions"
-export * from "./types"
+import { generateRouteMap } from "./routeMapGenerator";
+
+export * from "./functions";
+export * from "./types";
+export * from "./routeMapGenerator";
+
 
 //? Sample Route map
 //   export const routeMap: RouteMap = {
