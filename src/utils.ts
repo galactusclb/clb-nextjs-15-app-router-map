@@ -109,6 +109,6 @@ function generateTSContent(directoryTree: DirectoryProp): string {
     return `
 import { type RouteMap } from "app-router-map";
 
-export const routeMap: RouteMap = ${JSON.stringify(directoryTree, null, 2)};\n
+export const routeMap = ${JSON.stringify(directoryTree, null, 2)} as const satisfies RouteMap;\n
 `;
 }

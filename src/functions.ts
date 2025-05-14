@@ -1,17 +1,21 @@
-import { RouteNode } from "./types";
+import { GetRouteParams, RouteNode } from "./types";
 
-const getRoute = (
-    routeObj: RouteNode | string,
-    params: { [key: string]: string | number } = {}
+const getRoute = <T extends RouteNode>(
+    routeObj: T,
+    ...params : GetRouteParams<T> extends never ? [] : [{ [K in GetRouteParams<T>]: string | number | boolean }]
 ): string => {
 
     if (typeof routeObj === "string") return routeObj;
 
     let path = routeObj.path;
 
-    Object.keys(params).forEach((key) => {
-        path = path.replace(`[${key}]`, String(params[key]));
-    });
+    console.log(params);
+    
+    if (params?.[0]) {
+        (Object.keys(params[0]) as Array<GetRouteParams<T>>).forEach((key) => {
+            path = path.replace(`[${key}]`, String(params[0]?.[key]));
+        });
+    }
 
     return path;
 };
