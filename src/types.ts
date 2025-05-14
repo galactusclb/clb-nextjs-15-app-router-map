@@ -1,12 +1,8 @@
-import { routeMap } from "./routeMap";
-
-// Recursive type for a route node
 export type RouteNode = {
     path: string;
-    [key: string]: RouteNode | string; // subdirectories keys mapped to RouteNode
+    [key: string]: RouteNode | string;
 };
 
-// Top-level type for the route map
 export type RouteMap = {
     [route: string]: RouteNode;
 };

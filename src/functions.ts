@@ -1,8 +1,8 @@
 import { GetRouteParams, RouteNode } from "./types";
 
-const getRoute = <T extends RouteNode | string>(
+const getRoute = <T extends RouteNode>(
     routeObj: T,
-    ...params : GetRouteParams<T> extends never ? [] : [{ [K in GetRouteParams<T>]: string | number }]
+    ...params : GetRouteParams<T> extends never ? [] : [{ [K in GetRouteParams<T>]: string | number | boolean }]
 ): string => {
 
     if (typeof routeObj === "string") return routeObj;
